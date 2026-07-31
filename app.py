@@ -1,7 +1,24 @@
+import os
+
+# Work around a macOS OpenMP conflict between faiss and other native libs.
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+
+from dotenv import load_dotenv
+
+load_dotenv()  # make GROQ_API_KEY available for the PawPal+ AI agent (ChatGroq)
+
 import streamlit as st
 from datetime import datetime, date, time as dtime
 
 from pawpal_system import Owner, Pet, Task, Scheduler
+
+
+@st.cache_resource(show_spinner="Loading PawPal+ AI agent (embeddings + FAISS)...")
+def _get_pawpal_agent():
+    """Build the RAG + LangGraph + Groq agent once and reuse across reruns."""
+    from src.agent import PawPalAgent  # lazy import so the app starts fast
+
+    return PawPalAgent()
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
@@ -179,6 +196,101 @@ if st.button("Generate schedule", key="generate_schedule_button"):
             with st.expander("📝 Scheduling Rationale"):
                 st.text(sched.explain_plan(daily_plan))
         # End schedule generation
+
+st.divider()
+
+# --- AI Care Plan (PawPal+) ---------------------------------------------------
+st.subheader("🧠 AI Care Plan (PawPal+)")
+st.caption("Breed-aware daily care planning powered by RAG + LangGraph + Groq.")
+
+ai_pets = owner.get_pets()
+if not ai_pets:
+    st.info("Add a pet above to generate an AI care plan.")
+else:
+    ai_pet_names = [p.name for p in ai_pets]
+    selected_ai_pet_name = st.selectbox("Select a pet", ai_pet_names, key="ai_pet_select")
+    selected_pet = next((p for p in ai_pets if p.name == selected_ai_pet_name), None)
+
+    col_a, col_b = st.columns(2)
+    with col_a:
+        # Breed isn't tracked on Pet (only species) — let the user optionally
+        # provide it, since the RAG knowledge base is breed-specific.
+        default_breed = getattr(selected_pet, "species", "") or ""
+        ai_breed = st.text_input(
+            "Breed (optional — improves the plan; defaults to species)",
+            value=default_breed,
+            key="ai_breed_input",
+        )
+    with col_b:
+        ai_weight = st.number_input(
+            "Weight (kg, optional)",
+            min_value=0.0, max_value=120.0, value=0.0, step=0.5,
+            key="ai_weight_input",
+        )
+
+    ai_health_raw = st.text_input(
+        "Health conditions (comma-separated, optional)",
+        value="",
+        placeholder="e.g. arthritis, allergies",
+        key="ai_health_input",
+    )
+
+    ai_request = st.text_area(
+        "Request",
+        value="Create a daily care plan for tomorrow",
+        height=80,
+        key="ai_request_input",
+    )
+
+    if st.button("Generate AI Care Plan", key="generate_ai_plan_button"):
+        if selected_pet is None:
+            st.error("Selected pet not found.")
+        else:
+            # Build the pet_profile dict the agent expects.
+            health_conditions_list = [
+                c.strip() for c in ai_health_raw.split(",") if c.strip()
+            ]
+            pet_profile = {
+                "name": selected_pet.name,
+                "breed": ai_breed.strip()
+                or getattr(selected_pet, "species", None)
+                or "Unknown",
+                "age": selected_pet.age,
+                "weight_kg": ai_weight,
+                "health_conditions": health_conditions_list,
+            }
+
+            try:
+                agent = _get_pawpal_agent()
+                with st.spinner("Generating AI care plan..."):
+                    result = agent.run(pet_profile, ai_request)
+
+                st.subheader("📋 AI Care Plan")
+                st.markdown(result.get("validated_plan", "_(no plan generated)_"))
+
+                st.subheader("📊 Confidence & Issues")
+                confidence = float(result.get("confidence_score", 0.0))
+                st.write(f"**Confidence:** {confidence:.2f}")
+                st.progress(min(max(confidence, 0.0), 1.0))
+                issues = result.get("issues", [])
+                if issues:
+                    st.markdown("**Issues:**")
+                    for issue in issues:
+                        st.markdown(f"- ⚠️ {issue}")
+                else:
+                    st.success("No issues — plan covers all required elements.")
+
+                st.subheader("🧩 Explanation")
+                st.markdown(result.get("explanation", "_(no explanation generated)_"))
+
+            except Exception as e:
+                # Graceful failure — friendly message for the user, details to console.
+                print(f"[PawPal+] AI care plan error: {e!r}")
+                st.error(
+                    "Could not generate the AI care plan. Check that GROQ_API_KEY "
+                    "is set in your .env file, then try again.\n\n"
+                    f"Details: {e}"
+                )
 
 st.divider()
 st.caption("🐾 PawPal+ — Powered by intelligent pet care scheduling")

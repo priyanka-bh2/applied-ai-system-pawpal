@@ -1,0 +1,41 @@
+flowchart TD
+    %% ===== User Interface =====
+    User([User])
+    UI["Streamlit UI<br/>(pet profile + request)"]
+
+    %% ===== Orchestrator =====
+    Agent["PawPalAgent Orchestrator<br/>(LangGraph workflow)"]
+
+    %% ===== RAG Pipeline =====
+    subgraph RAG["RAG Pipeline"]
+        Retriever["CareGuidelineRetriever"]
+        Embeddings["HuggingFaceEmbeddings<br/>all-MiniLM-L6-v2"]
+        VectorStore[("FAISS Vector Store")]
+        KB[/"breed_guidelines.json<br/>knowledge base"/]
+    end
+
+    %% ===== Agentic Workflow =====
+    subgraph Workflow["Agentic Workflow (LangGraph nodes)"]
+        Plan["Plan Generation<br/>ChatGroq · llama-3.3-70b-versatile"]
+        Validate["Validation Node<br/>checks feeding / exercise / water<br/>+ confidence score"]
+        Explain["Explanation Node<br/>why each task matters<br/>(uses retrieved guidelines)"]
+    end
+
+    %% ===== Data Flow =====
+    User -->|enters profile + request| UI
+    UI -->|invoke run| Agent
+
+    Agent -->|1 retrieve context| Retriever
+    KB -->|indexed at startup| Embeddings
+    Embeddings -->|vectors| VectorStore
+    Retriever -->|similarity search| VectorStore
+    VectorStore -->|top-k guidelines| Retriever
+    Retriever -->|retrieved context| Agent
+
+    Agent -->|2 generate plan| Plan
+    Plan -->|draft plan| Validate
+    Validate -->|validated plan + confidence| Explain
+    Explain -->|explanation| Agent
+
+    Agent -->|final result| UI
+    UI -->|care plan + confidence + issues + explanation| User

@@ -1,0 +1,94 @@
+{
+  "breeds": [
+    {
+      "breed": "Golden Retriever",
+      "exercise": "60-90 minutes daily. High-energy breed needs vigorous exercise like running, fetching, swimming.",
+      "diet": "High-quality dog food, 2-3 cups daily divided into 2 meals. Prone to obesity - measure portions.",
+      "grooming": "Brush 2-3 times weekly (double coat sheds heavily). Bathe monthly. Clean ears weekly.",
+      "health_concerns": "Hip dysplasia, elbow dysplasia, heart conditions. Regular vet checkups essential.",
+      "lifespan": "10-12 years",
+      "special_notes": "Very social - needs companionship. Excellent with families."
+    },
+    {
+      "breed": "Labrador Retriever",
+      "exercise": "60+ minutes daily. Loves swimming, fetching, running. High energy.",
+      "diet": "2.5-3 cups high-quality food daily, split into 2 meals. Monitor weight.",
+      "grooming": "Weekly brushing. Bathe as needed. Trim nails monthly.",
+      "health_concerns": "Hip/elbow dysplasia, eye conditions. Regular vet visits important.",
+      "lifespan": "10-12 years",
+      "special_notes": "Extremely friendly and outgoing. Loves water."
+    },
+    {
+      "breed": "German Shepherd",
+      "exercise": "90+ minutes daily. Needs vigorous physical AND mental exercise.",
+      "diet": "3-4 cups high-quality food daily, 2 meals. High protein.",
+      "grooming": "Brush 3-4 times weekly. Bathe every 2-3 months.",
+      "health_concerns": "Hip dysplasia, degenerative myelopathy, bloat.",
+      "lifespan": "9-13 years",
+      "special_notes": "Highly intelligent, needs mental challenges."
+    },
+    {
+      "breed": "French Bulldog",
+      "exercise": "20-30 minutes daily. Low energy. Avoid overexertion.",
+      "diet": "1-1.5 cups daily, split into 2-3 small meals.",
+      "grooming": "Weekly brushing. Clean facial wrinkles daily.",
+      "health_concerns": "Brachycephalic syndrome, heat sensitivity, allergies.",
+      "lifespan": "10-12 years",
+      "special_notes": "Heat intolerant. Apartment-friendly."
+    },
+    {
+      "breed": "Siberian Husky",
+      "exercise": "90-120 minutes daily. Extremely high energy. Built for running.",
+      "diet": "2-3 cups high-quality food daily, 2 meals.",
+      "grooming": "Brush 2-3 times weekly. Heavy shedding seasonally.",
+      "health_concerns": "Hip dysplasia, eye conditions.",
+      "lifespan": "12-15 years",
+      "special_notes": "Escape artists. Vocal (howling). Pack animals."
+    },
+    {
+      "breed": "Poodle",
+      "exercise": "45-60 minutes daily. Intelligent - needs mental challenges.",
+      "diet": "2-3 cups high-quality food daily, 2 meals.",
+      "grooming": "Professional grooming every 6-8 weeks. Hypoallergenic.",
+      "health_concerns": "Hip dysplasia, bloat, Addison's disease.",
+      "lifespan": "12-15 years",
+      "special_notes": "Third most intelligent breed. Highly trainable."
+    },
+    {
+      "breed": "Beagle",
+      "exercise": "45-60 minutes daily. Moderate energy. Scent-driven.",
+      "diet": "1.5-2 cups daily, split into 2 meals. Prone to obesity.",
+      "grooming": "Weekly brushing. Clean ears weekly.",
+      "health_concerns": "Obesity, epilepsy, ear infections.",
+      "lifespan": "12-15 years",
+      "special_notes": "Vocal breed. Strong prey drive."
+    },
+    {
+      "breed": "Yorkshire Terrier",
+      "exercise": "20-30 minutes daily. Moderate energy.",
+      "diet": "1/2-1 cup daily, split into 2-3 small meals.",
+      "grooming": "Daily brushing. Professional grooming every 6-8 weeks.",
+      "health_concerns": "Dental disease, luxating patella, tracheal collapse.",
+      "lifespan": "13-16 years",
+      "special_notes": "Good for apartments. Can be yappy."
+    },
+    {
+      "breed": "Boxer",
+      "exercise": "60+ minutes daily. High energy, loves play.",
+      "diet": "2.5-3 cups daily, 2 meals. Prone to bloat.",
+      "grooming": "Weekly brushing. Low maintenance coat.",
+      "health_concerns": "Heart conditions, hip dysplasia, cancer.",
+      "lifespan": "10-12 years",
+      "special_notes": "Playful with kids. Protective instinct."
+    },
+    {
+      "breed": "Australian Shepherd",
+      "exercise": "90+ minutes daily. Extremely high energy working breed.",
+      "diet": "2.5-3 cups high-quality food daily, 2 meals.",
+      "grooming": "Brush 2-3 times weekly. Moderate shedding.",
+      "health_concerns": "Hip dysplasia, eye conditions, epilepsy.",
+      "lifespan": "12-15 years",
+      "special_notes": "Workaholic - needs a job. Herding instinct."
+    }
+  ]
+}
